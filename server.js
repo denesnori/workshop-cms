@@ -1,8 +1,10 @@
 var http = require('http');
 var fs = require('fs');
+var path = require('path');
 
 function handler(request,response){
   var endpoint = request.url;
+  var extension = path.extname(endpoint).substring(1);
   console.log(endpoint);
   if(endpoint === "/"){
 
@@ -14,6 +16,16 @@ function handler(request,response){
           console.log(err);
           return;
         }
+      response.end(file);
+    });
+  } else {
+    response.writeHead(200,{"Content-type":"text/"+extension});
+
+    fs.readFile(__dirname +'/public'+ endpoint,function(err,file){
+      if (err) {
+        console.log(err);
+        return;
+      }
       response.end(file);
     });
   }
