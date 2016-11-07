@@ -1,11 +1,22 @@
 var http = require('http');
-
-var message = "Learning node at night is fun!";
+var fs = require('fs');
 
 function handler(request,response){
-  response.writeHead(200,{"Content-type":"text/html"});
-  response.write(message);
-  response.end();
+  var endpoint = request.url;
+  console.log(endpoint);
+  if(endpoint === "/"){
+
+    response.writeHead(200,{"Content-type":"text/html"});
+
+    fs.readFile(__dirname + '/public/index.html',function(err,file){
+        console.log(__dirname+'/public/index.html');
+        if (err){
+          console.log(err);
+          return;
+        }
+      response.end(file);
+    });
+  }
 }
 
 var server = http.createServer(handler);
